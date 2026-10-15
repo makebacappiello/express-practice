@@ -11,6 +11,7 @@ app.get("/", (req, res) => {
 app.get("/cards", (req, res) => {
   res.render("cards", {
     prompt: "Who is buried in Grant's tomb?",
+    colors: colors,
   });
 });
 
