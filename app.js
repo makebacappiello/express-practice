@@ -1,7 +1,9 @@
 const express = require("express");
-const app = express();
-// const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+const bodyParser = require("body-parser");
 
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.set("view engine", "pug");
 
 app.get("/", (req, res) => {
@@ -11,8 +13,15 @@ app.get("/", (req, res) => {
 app.get("/cards", (req, res) => {
   res.render("cards", {
     prompt: "Who is buried in Grant's tomb?",
-    // colors: colors,
   });
+});
+app.get("/hello", (req, res) => {
+  res.render("hello");
+});
+
+app.post("/hello", (req, res) => {
+  console.dir(req.body);
+  res.json("hello", { name: req.body.username });
 });
 
 app.listen(3000, () => {
