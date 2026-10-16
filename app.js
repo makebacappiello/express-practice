@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+// const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
 
 app.set("view engine", "pug");
 
@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 app.get("/cards", (req, res) => {
   res.render("cards", {
     prompt: "Who is buried in Grant's tomb?",
-    colors: colors,
+    // colors: colors,
   });
 });
 
