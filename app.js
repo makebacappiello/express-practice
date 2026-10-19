@@ -8,19 +8,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.set("view engine", "pug");
 
-app.use(
-  (req, res, next) => {
-    console.log("One");
-    next();
-  },
-  (req, res, next) => {
-    console.log("One and a half");
-    next();
-  }
-);
+app.use((req, res, next) => {
+  req.message = "This message made it";
+  next();
+});
 
 app.use((req, res, next) => {
-  console.log("Two");
+  console.log("req.message");
   next();
 });
 
