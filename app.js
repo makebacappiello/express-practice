@@ -3,54 +3,43 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const app = express();
-
+//does nothing but it runs first
 app.use(bodyParser.urlencoded({ extended: false }));
+
+//runs second
 app.use(cookieParser());
+
 app.set("view engine", "pug");
 
+const mainRoutes = require("./routes");
+const cardsRoutes = require("./routes/cards");
+
+app.use(mainRoutes);
+app.use("/cards", cardsRoutes);
+
+// Runs logging out the console when next is called...
 app.use((req, res, next) => {
-  req.message = "This message made it";
+  console.log("hello");
+  const err = new Error("Oh noes!");
+  err.status = 500;
+  next(err);
+});
+//...this piece of middleware is executed
+app.use((req, res, next) => {
+  console.log("world");
   next();
 });
 
 app.use((req, res, next) => {
-  console.log("req.message");
-  next();
+  const err = new Error("Not Found!");
+  err.status = 404;
+  next(err);
 });
-
-app.get("/", (req, res) => {
-  const name = req.cookies.username;
-  if (name) {
-    res.render("index", { name });
-  } else {
-    res.redirect("/hello");
-  }
+app.use((err, req, res, next) => {
+  res.locals.error = err;
+  res.status(err.status);
+  res.render("error", err);
 });
-
-app.get("/cards", (req, res) => {
-  res.render("cards", {
-    prompt: "Who is buried in Grant's tomb?",
-  });
-});
-app.get("/hello", (req, res) => {
-  const name = req.cookies.username;
-  if (name) {
-    res.redirect("/");
-  } else {
-    res.render("hello");
-  }
-});
-
-app.post("/hello", (req, res) => {
-  res.cookie("username", req.body.username);
-  console.dir(req.body);
-  res.redirect("/");
-});
-app.post("/goodbye", (req, res) => {
-  res.clearCookie("username");
-  res.redirect("/hello");
-});
-
 app.listen(3000, () => {
   console.log("The application is running on localhost:3000 ");
 });
