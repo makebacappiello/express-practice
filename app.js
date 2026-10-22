@@ -7,8 +7,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //runs second
-app.use(cookieParser());
 app.use("/static", express.static("public"));
+app.use(cookieParser());
 app.set("view engine", "pug");
 
 const mainRoutes = require("./routes");
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 app.use((err, req, res, next) => {
   res.locals.error = err;
-  res.status(err.status);
+  res.status(err.status || 500);
   res.render("error", err);
 });
 app.listen(3000, () => {
